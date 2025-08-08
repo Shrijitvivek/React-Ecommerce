@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import Sidebar from './Sidebar'
 
 
 export default function Products() {
@@ -14,7 +15,8 @@ export default function Products() {
       })
   },[])
   return (
-   <div className="p-8">
+   <div className=" ml-50 p-8">
+    <Sidebar/>
   <h1 className="text-2xl font-bold mb-6">Products</h1>
 
   <div className="overflow-x-auto">

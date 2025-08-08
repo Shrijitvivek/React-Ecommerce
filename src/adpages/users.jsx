@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import Sidebar from './Sidebar'
+import { Link } from 'react-router-dom'
 
 
 export default function Users() {
@@ -16,7 +18,8 @@ export default function Users() {
       })
   },[])
   return (
-   <div className="p-8">
+   <div className=" ml-50 p-8">
+    <Sidebar/>
   <h1 className="text-2xl font-bold mb-6">User List</h1>
 
   <div className="overflow-x-auto">
@@ -37,10 +40,13 @@ export default function Users() {
             <td 
             className="px-4 py-2 border-b">
               <img src={`http://localhost:2000/${user.image}`} 
-              className='w-35 h-40 rounded-full ' />
+              className='w-35 h-45 rounded-full ' />
             </td>
             <td className="text-left px-4 py-2 border-b">
-              <button className='bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600'>Edit</button> 
+              <Link to='/edituser'>
+               <button className='bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600'>Edit</button>
+              </Link>
+              
               <button className='bg-red-500 text-white px-4 mx-5 py-1 rounded hover:bg-red-600'>Delete</button>
               </td>
 
