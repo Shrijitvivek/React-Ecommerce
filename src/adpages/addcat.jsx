@@ -9,10 +9,6 @@ export default function Addcat() {
     const navigate = useNavigate();
 
     const handleSave = () => {
-        if (!name.trim() || !description.trim()) {
-            alert("Please fill all fields");
-            return;
-        }
         axios.post('http://localhost:2000/admin/categories', { name, description }, 
             { withCredentials: true }
         )
@@ -50,7 +46,7 @@ export default function Addcat() {
                         className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
                         onClick={handleSave}
                     >
-                        Save
+                        Add
                     </button>
                 </div>
             </div>

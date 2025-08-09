@@ -29,7 +29,6 @@ export default function Users() {
           <th className="text-left px-4 py-2 border-b"> Name</th>
           <th className="text-left px-4 py-2 border-b">Email</th>
           <th className="text-left px-4 py-2 border-b">Image</th>
-          <th className="text-left px-4 py-2 border-b">Action</th>
         </tr>
       </thead>
       <tbody>
@@ -42,13 +41,7 @@ export default function Users() {
               <img src={`http://localhost:2000/${user.image}`} 
               className='w-35 h-45 rounded-full ' />
             </td>
-            <td className="text-left px-4 py-2 border-b">
-              <Link to='/edituser'>
-               <button className='bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600'>Edit</button>
-              </Link>
-              
-              <button className='bg-red-500 text-white px-4 mx-5 py-1 rounded hover:bg-red-600'>Delete</button>
-              </td>
+           
 
           </tr>
         ))}

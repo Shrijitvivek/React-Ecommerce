@@ -6,6 +6,8 @@ import Users from "./adpages/users"
 import Useredit from "./userpages/edit"
 import Category from "./adpages/categories"
 import Addcat from "./adpages/addcat"
+import Addprod from "./adpages/addprod"
+import Editprod from "./adpages/editprod"
 
 
 function App() {
@@ -22,6 +24,10 @@ function App() {
  <Route path="/categories" element={<Category/>}/>
  <Route path ='/edituser' element={<Useredit/>}/>
  <Route path ='/categories/addcat' element={<Addcat/>}/>
+  <Route path ='/products/addprod' element={<Addprod/>}/>
+  <Route path="/editprod/:id" element={<Editprod />} />
+
+
 </Routes>
      
 

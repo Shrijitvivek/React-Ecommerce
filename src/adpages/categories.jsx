@@ -21,7 +21,7 @@ export default function Category() {
     <div className='flex justify-between'>
  <h1 className="text-2xl font-bold mb-6">Categories</h1>
  <Link to='addcat'>
- <button className='bg-green-500 p-2 rounded'> + Add Category</button>
+ <button className='bg-green-500 p-2 rounded'> + Add New Category</button>
  </Link>
  
 
