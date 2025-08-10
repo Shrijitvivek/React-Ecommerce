@@ -8,6 +8,8 @@ import Category from "./adpages/categories"
 import Addcat from "./adpages/addcat"
 import Addprod from "./adpages/addprod"
 import Editprod from "./adpages/editprod"
+import Editcat from "./adpages/editcat"
+import Orders from "./adpages/orders"
 
 
 function App() {
@@ -26,6 +28,8 @@ function App() {
  <Route path ='/categories/addcat' element={<Addcat/>}/>
   <Route path ='/products/addprod' element={<Addprod/>}/>
   <Route path="/editprod/:id" element={<Editprod />} />
+  <Route path="/editcat/:id" element={<Editcat/>}/>
+  <Route path="/orders" element={<Orders/>}/>
 
 
 </Routes>

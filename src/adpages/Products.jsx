@@ -28,7 +28,7 @@ export default function Products() {
     if (window.confirm('Are you sure you want to delete this product?')) {
       axios.delete(`http://localhost:2000/admin/products/${id}`, { withCredentials: true })
         .then(() => {
-          fetchProducts(); // reload products after delete
+          fetchProducts(); 
         })
         .catch((err) => {
           console.error('Failed to delete', err);

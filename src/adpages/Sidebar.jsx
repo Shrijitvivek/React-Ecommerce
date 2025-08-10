@@ -4,6 +4,7 @@ import sidebar from '../assets/sidebar.png';
 import products from '../assets/prod.png';
 import users from '../assets/user.png';
 import cat from '../assets/categ.png';
+import ord from '../assets/order.png'
 import logout from '../assets/lout.png';
 
 function Sidebar() {
@@ -37,6 +38,13 @@ function Sidebar() {
           <div className="flex items-center gap-4 mb-8 hover:bg-white/10 p-2 rounded-lg transition-all duration-300">
             <img src={cat} alt="Categories" className="max-w-[40px]" />
             <p className="text-lg font-medium">Categories</p>
+          </div>
+        </Link>
+
+        <Link to='/orders'>
+          <div className="flex items-center gap-4 mb-8 hover:bg-white/10 p-2 rounded-lg transition-all duration-300">
+            <img src={ord} alt="Categories" className="max-w-[40px]" />
+            <p className="text-lg font-medium">Orders</p>
           </div>
         </Link>
 
