@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Sidebar from "./Sidebar"; // adjust path if needed
+import Sidebar from "./Sidebar";
 
 export default function Orders() {
   const [orders, setOrders] = useState([]);
@@ -18,66 +18,99 @@ export default function Orders() {
       .catch((err) => console.error("Error:", err));
   }, []);
 
-  return (
-    <div style={{ display: "flex", minHeight: "100vh" }}>
-      {/* Sidebar on the left */}
-      <div style={{ width: "250px", background: "#f5f5f5" }}>
-        <Sidebar />
-      </div>
+  const updateStatus = (id, status) => {
+    axios
+      .put(
+        `http://localhost:2000/admin/orders/${id}`,
+        { deliveryStatus: status },
+        { withCredentials: true }
+      )
+      .then(() => {
+        setOrders((prev) =>
+          prev.map((o) => (o._id === id ? { ...o, DeliveryStatus: status } : o))
+        );
+      })
+      .catch((err) => console.error(err));
+  };
 
-      {/* Table content on the right */}
-      <div style={{ flex: 1, padding: "20px" }}>
-        <h1 className="text-2xl font-bold mb-6">Orders</h1>
-        <table
-          style={{
-            width: "100%",
-            borderCollapse: "collapse",
-            textAlign: "center",
-          }}
-        >
+  return (
+    <div className="ml-50 p-8">
+      <Sidebar />
+      <h1 className="text-2xl font-bold mb-6">Orders</h1>
+
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-white border border-gray-300">
           <thead>
-            <tr>
-              <th style={{ border: "1px solid #ddd", padding: "8px" }}>
-                Username
-              </th>
-              <th style={{ border: "1px solid #ddd", padding: "8px" }}>
-                Items
-              </th>
-              <th style={{ border: "1px solid #ddd", padding: "8px" }}>
-                Total
-              </th>
-              <th style={{ border: "1px solid #ddd", padding: "8px" }}>
-                Delivery Status
-              </th>
+            <tr className="bg-gray-100">
+              <th className="text-left px-4 py-2 border-b">Username</th>
+              <th className="text-left px-4 py-2 border-b">Product Name</th>
+              <th className="text-left px-4 py-2 border-b">Quantity</th>
+              <th className="text-left px-4 py-2 border-b">Price</th>
+              <th className="text-left px-4 py-2 border-b">SubTotal</th>
+              <th className="text-left px-4 py-2 border-b">Total</th>
+              <th className="text-left px-4 py-2 border-b">Delivery Status</th>
             </tr>
           </thead>
           <tbody>
-            {orders.map((order) => (
-              <tr key={order._id}>
-                <td style={{ border: "1px solid #ddd", padding: "8px" }}>
-                  {order.UserName}
-                </td>
-                <td style={{ border: "1px solid #ddd", padding: "8px" }}>
-                  {order.Items.map((item, idx) => (
-                    <div key={idx}>
-                      {item.ProductName} - {item.Quantity} × ₹{item.Price} =
-                      ₹{item.SubTotal}
-                    </div>
-                  ))}
-                </td>
-                <td style={{ border: "1px solid #ddd", padding: "8px" }}>
-                  ₹{order.Total}
-                </td>
-                <td style={{ border: "1px solid #ddd", padding: "8px" }}>
-                  <select value={order.DeliveryStatus || ""}>
-                    <option value="Pending">Pending</option>
-                    <option value="Processing">Processing</option>
-                    <option value="Shipped">Shipped</option>
-                    <option value="Delivered">Delivered</option>
-                  </select>
+            {orders.length > 0 ? (
+              orders.map((order) =>
+                order.Items.map((item, idx) => (
+                  <tr key={`${order._id}-${idx}`} className="hover:bg-gray-50">
+                    {/* Username only in first row of order */}
+                    {idx === 0 ? (
+                      <td
+                        className="px-4 py-2 border-b"
+                        rowSpan={order.Items.length}
+                      >
+                        {order.UserName}
+                      </td>
+                    ) : null}
+
+                    <td className="px-4 py-2 border-b">{item.ProductName}</td>
+                    <td className="px-4 py-2 border-b">{item.Quantity}</td>
+                    <td className="px-4 py-2 border-b">₹{item.Price}</td>
+                    <td className="px-4 py-2 border-b">₹{item.SubTotal}</td>
+
+                    {/* Total only in first row of order */}
+                    {idx === 0 ? (
+                      <td
+                        className="px-4 py-2 border-b"
+                        rowSpan={order.Items.length}
+                      >
+                        ₹{order.Total}
+                      </td>
+                    ) : null}
+
+                    {/* Delivery Status only in first row of order */}
+                    {idx === 0 ? (
+                      <td
+                        className="px-4 py-2 border-b"
+                        rowSpan={order.Items.length}
+                      >
+                        <select
+                          value={order.DeliveryStatus || ""}
+                          onChange={(e) =>
+                            updateStatus(order._id, e.target.value)
+                          }
+                          className="border rounded px-2 py-1"
+                        >
+                          <option value="Pending">Pending</option>
+                          <option value="Processing">Processing</option>
+                          <option value="Shipped">Shipped</option>
+                          <option value="Delivered">Delivered</option>
+                        </select>
+                      </td>
+                    ) : null}
+                  </tr>
+                ))
+              )
+            ) : (
+              <tr>
+                <td colSpan="7" className="text-center py-4">
+                  No orders found
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>

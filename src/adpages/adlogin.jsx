@@ -18,6 +18,7 @@ function Adlogin() {
       console.log(response.data)
 
       if (response.data.message1) {
+        localStorage.getItem('admin' , 'true')
         navigate('/admindash')
       }
     } catch (error) {
