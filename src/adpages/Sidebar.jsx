@@ -6,8 +6,17 @@ import users from '../assets/user.png';
 import cat from '../assets/categ.png';
 import ord from '../assets/order.png'
 import logout from '../assets/lout.png';
+import { useNavigate } from 'react-router-dom';
 
 function Sidebar() {
+
+const navigate = useNavigate()
+
+  const handleLogout = () => {
+    localStorage.removeItem('admin'); 
+    navigate('/admin');               
+  };
+
   return (
     <div className="fixed top-0 left-0 w-16 hover:w-52 h-screen bg-gradient-to-b from-[#1e293b] via-[#334155] to-[#0f172a] transition-all duration-500 flex flex-col overflow-hidden text-white shadow-lg">
 
@@ -48,12 +57,14 @@ function Sidebar() {
           </div>
         </Link>
 
-        <Link to='/'>
-          <div className="flex items-center gap-4 hover:bg-red-500 p-2 rounded-lg transition-all duration-300">
+       
+          <div 
+          
+          onClick={handleLogout}
+          className="flex items-center gap-4 hover:bg-red-500 p-2 rounded-lg transition-all duration-300">
             <img src={logout} alt="Logout" className="max-w-[40px]" />
             <p className="text-lg font-medium">Logout</p>
           </div>
-        </Link>
       </div>
     </div>
   );
