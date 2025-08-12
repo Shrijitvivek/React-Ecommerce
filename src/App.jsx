@@ -11,6 +11,8 @@ import Editprod from "./adpages/editprod"
 import Editcat from "./adpages/editcat"
 import Orders from "./adpages/orders"
 import ProtectedRoute from "./adpages/ProtectedRoute"
+import Login from "./userpages/login"
+import HomePage from "./userpages/HomePage"
 
 
 function App() {
@@ -31,6 +33,8 @@ function App() {
         <Route path="/editprod/:id" element={<ProtectedRoute><Editprod /></ProtectedRoute>} />
         <Route path="/editcat/:id" element={<ProtectedRoute><Editcat /></ProtectedRoute>} />
         <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
+        <Route path="/uselogin" element={<Login/>}/>
+        <Route path="/home"element={<HomePage/>}/>
 
 
       </Routes>

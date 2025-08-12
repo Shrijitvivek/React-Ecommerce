@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import sidebar from '../assets/sidebar.png';
+
 import products from '../assets/prod.png';
 import users from '../assets/user.png';
 import cat from '../assets/categ.png';
@@ -22,12 +22,7 @@ const navigate = useNavigate()
 
     
       <div className="flex-1 overflow-y-auto no-scrollbar p-4">
-        <Link to='/home'>
-          <div className="flex items-center gap-4 mb-8 hover:bg-white/10 p-2 rounded-lg transition-all duration-300">
-            <img src={sidebar} alt="Home" className="max-w-[40px]" />
-            <p className="text-lg font-medium">Home</p>
-          </div>
-        </Link>
+       
 
         <Link to='/products'>
           <div className="flex items-center gap-4 mb-8 hover:bg-white/10 p-2 rounded-lg transition-all duration-300">
