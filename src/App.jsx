@@ -13,6 +13,7 @@ import Orders from "./adpages/orders"
 import ProtectedRoute from "./adpages/ProtectedRoute"
 import Login from "./userpages/login"
 import HomePage from "./userpages/HomePage"
+import ProductDetails from "./userpages/ProductDetails"
 
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
         <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
         <Route path="/uselogin" element={<Login/>}/>
         <Route path="/home"element={<HomePage/>}/>
+        <Route path='/product/:id' element={<ProductDetails/>}/>
 
 
       </Routes>

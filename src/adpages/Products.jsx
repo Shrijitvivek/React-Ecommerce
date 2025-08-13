@@ -48,15 +48,15 @@ export default function Products() {
 
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-300">
-          <thead>
+          <thead className='text-xl'>
             <tr className="bg-gray-100">
-              <th className="text-left px-4 py-2 border-b">Product Name</th>
-              <th className="text-left px-4 py-2 border-b">Price</th>
-              <th className="text-left px-4 py-2 border-b">Description</th>
-              <th className="text-left px-4 py-2 border-b">Category</th>
-              <th className="text-left px-4 py-2 border-b">Image</th>
-              <th className="text-left px-4 py-2 border-b">Stock</th>
-              <th className="text-left px-4 py-2 border-b">Action</th>
+              <th className="text-center px-4 py-2 border-b">Product Name</th>
+              <th className="text-center px-4 py-2 border-b">Price</th>
+              <th className="text-center px-4 py-2 border-b">Description</th>
+              <th className="text-center px-4 py-2 border-b">Category</th>
+              <th className="text-center px-4 py-2 border-b">Image</th>
+              <th className="text-center px-4 py-2 border-b">Stock</th>
+              <th className="text-center px-4 py-2 border-b">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -88,13 +88,13 @@ export default function Products() {
 
                   <td className="text-left px-4 py-2 border-b">
                     <Link to={`/editprod/${product._id}`}>
-                      <button className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600">
+                      <button className="bg-blue-500 text-white  mx-6 px-5 py-1 rounded hover:bg-blue-600">
                         Edit
                       </button>
                     </Link>
 
 
-                    <button onClick={()=>handleDelete(product._id)}className="bg-red-500 text-white px-4 mx-5 py-1 rounded hover:bg-red-600">
+                    <button onClick={()=>handleDelete(product._id)}className="bg-red-500 text-white my-3 px-4 mx-5 py-1 rounded hover:bg-red-600">
                       Delete
                     </button>
                   </td>

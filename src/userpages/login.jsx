@@ -18,8 +18,7 @@ function Login() {
       console.log(response.data)
 
       if (response.data.message1) {
-        localStorage.setItem('users' , true)
-        navigate('/uselogin')
+        navigate('/home')
       }
     } catch (error) {
       console.error('Login error', error)
