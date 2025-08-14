@@ -14,6 +14,7 @@ import ProtectedRoute from "./adpages/ProtectedRoute"
 import Login from "./userpages/login"
 import HomePage from "./userpages/HomePage"
 import ProductDetails from "./userpages/ProductDetails"
+import CategoryPage from "./userpages/CategoryPage"
 
 
 function App() {
@@ -37,6 +38,10 @@ function App() {
         <Route path="/uselogin" element={<Login/>}/>
         <Route path="/home"element={<HomePage/>}/>
         <Route path='/product/:id' element={<ProductDetails/>}/>
+        <Route path="/user/categories" element={<CategoryPage />} />
+         <Route path="/categories/:id" element={<CategoryPage />} />
+         <Route path='user/categories/687dc5fdd65009b81e993377' element={<CategoryPage/>}/>
+
 
 
       </Routes>

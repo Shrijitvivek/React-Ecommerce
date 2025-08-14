@@ -56,7 +56,7 @@ export default function Homeprod() {
           {products.map((product) => (
             <div
               key={product._id}
-              className="flex-shrink-0 w-64 bg-white rounded-lg shadow-md p-4 cursor-pointer hover:shadow-lg transition-shadow"
+              className=" mt-5 flex-shrink-0 w-64 bg-white rounded-lg shadow-md p-4 cursor-pointer hover:shadow-lg transition-shadow"
               onClick={() => navigate(`/product/${product._id}`)}
             >
               <img
