@@ -7,23 +7,27 @@ function Login() {
   const [password, setPassword] = useState("")
   const navigate = useNavigate()
 
-  const handleLogin = async () => {
-    try {
-      const response = await axios.post('http://localhost:2000/user/login', {
-        email, password
-      }, {
-        withCredentials: true
-      })
+const handleLogin = async () => {
+  try {
+    const response = await axios.post(
+      "http://localhost:2000/user/login",
+      { email, password },
+      { withCredentials: true }
+    );
 
-      console.log(response.data)
+    console.log(response.data);
 
-      if (response.data.message1) {
-        navigate('/home')
-      }
-    } catch (error) {
-      console.error('Login error', error)
+    if (response.data.message === "User logged in") {
+      navigate("/home");
+    } else {
+      alert(response.data.message); 
     }
+  } catch (error) {
+    console.error("Login error", error);
+    alert("Something went wrong. Please try again.");
   }
+};
+
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">

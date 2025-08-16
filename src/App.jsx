@@ -15,6 +15,7 @@ import Login from "./userpages/login"
 import HomePage from "./userpages/HomePage"
 import ProductDetails from "./userpages/ProductDetails"
 import CategoryPage from "./userpages/CategoryPage"
+import Cart from "./userpages/Cart"
 
 
 function App() {
@@ -41,6 +42,7 @@ function App() {
         <Route path="/user/categories" element={<CategoryPage />} />
          <Route path="/categories/:id" element={<CategoryPage />} />
          <Route path='user/categories/687dc5fdd65009b81e993377' element={<CategoryPage/>}/>
+         <Route path="/cart" element={<Cart/>}/>
 
 
 

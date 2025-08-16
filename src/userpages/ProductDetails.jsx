@@ -1,12 +1,14 @@
 import {useState , useEffect} from 'react'
-import { useParams } from 'react-router-dom'
-import api from '../api/axios'
+import { useNavigate, useParams } from 'react-router-dom'
+import api from '../api/axios' 
 import Navbar from './Navbar'
+
 
 export default function ProductDetails() {
     const {id} = useParams()
     const [product , SetProduct] = useState(null)
     const [quantity , SetQuantity] = useState(1)
+    const navigate = useNavigate()
     
     useEffect(()=>{
         api.get(`/user/products/${id}`)
@@ -31,7 +33,7 @@ export default function ProductDetails() {
                 <p className="text-xl mt-4 text-gray-700">{product.Description}</p>
 
                 <div className="mt-6 flex items-center gap-4">
-                    <label className="font-semibold">Quantity:</label>
+                    <label className=" text-xl font-semibold">Quantity :</label>
                     <input 
                         type="number" 
                         value={quantity} 
@@ -40,6 +42,27 @@ export default function ProductDetails() {
                         className="border p-2 w-16 text-center"
                     />
                 </div>
+                
+                <div>
+  <button
+    onClick={async () => {
+      try {
+        await api.post("/user/cart", {
+          ProductId: product._id,
+          Quantity: quantity,
+        });
+        navigate("/cart"); // ✅ only navigate after success
+      } catch (err) {
+        console.error("Error adding to cart:", err);
+        alert("Please login first to add items to cart.");
+      }
+    }}
+    className="bg-black text-white m-5 p-4 text-xl rounded-xl"
+  >
+    Add to Cart
+  </button>
+</div>
+
             </div>
         </>
    
