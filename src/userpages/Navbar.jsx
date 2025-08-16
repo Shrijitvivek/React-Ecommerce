@@ -1,46 +1,88 @@
-import { FaShoppingCart, FaUser } from "react-icons/fa";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "../api/axios";
+import { User , ShoppingCart } from "lucide-react"; // profile icon
 
 export default function Navbar() {
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
+  // Check login status when Navbar loads
+  useEffect(() => {
+    api.get("/user/auth/check")
+      .then((res) => {
+        if (res.data.loggedIn) {
+          setUser(res.data.user);
+        } else {
+          setUser(null);
+        }
+      })
+      .catch(() => setUser(null));
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await api.get("/user/logout"); // 👈 call backend logout (map this to `lout`)
+      setUser(null); // 👈 immediately reset frontend state
+      navigate("/home");
+    } catch (err) {
+      console.error("Logout failed:", err);
+    }
+  };
+
   return (
-    <nav className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 shadow-lg px-6 py-3 flex items-center justify-between">
-      {/* Left: Logo / Home */}
-      <div
-        className="text-2xl font-extrabold text-white tracking-wide cursor-pointer"
-        onClick={() => navigate("/")}
+    <nav className="flex justify-between items-center px-6 py-4 bg-black text-white shadow-md">
+      
+      <h1
+        className="text-2xl font-bold cursor-pointer"
+        onClick={() => navigate("/home")}
       >
-        Shop<span className="text-yellow-300">Logo</span>
-      </div>
+        MyShop
+      </h1>
 
-      {/* Middle: Home Link + Search */}
-      <div className="flex items-center gap-6">
-        <button
-          className="relative group text-white font-medium"
-          onClick={() => navigate("/home")}
-        >
-          Home
-          <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-yellow-300 transition-all duration-300 group-hover:w-full"></span>
-        </button>
+     
+      <div className="flex items-center gap-4">
+        {!user ? (
+          <>
+          
+            <button
+              onClick={() => navigate("/register")}
+              className="px-4 py-2 bg-green-500 rounded-lg hover:bg-green-600"
+            >
+              Create an Account
+            </button>
 
-        <input
-          type="text"
-          placeholder="Search products..."
-          className="text-black border border-gray-300 p-2 rounded-md outline-none bg-white"
-        />
-      </div>
+            <button
+              onClick={() => navigate("/uselogin")}
+              className="px-4 py-2 bg-blue-500 rounded-lg hover:bg-blue-600"
+            >
+              Login to Existing Account
+            </button>
+          </>
+        ) : (
+          <>
+           <ShoppingCart onClick={()=> navigate('/cart')}
+            className="cursor-pointer"/> 
+          
+            
+            <div
+              onClick={() => navigate("/profile")}
+              className="cursor-pointer flex items-center gap-2"
+            >
+              
+              <User size={24} />
+              <span>{user.name}</span>
+            </div>
 
-      {/* Right: Icons */}
-      <div className="flex items-center gap-5 text-white text-lg">
-        <FaShoppingCart
-          className="cursor-pointer hover:text-yellow-300 transition"
-          onClick={() => navigate("/cart")}
-        />
-        <FaUser
-          className="cursor-pointer hover:text-yellow-300 transition"
-          onClick={() => navigate("/profile")}
-        />
+        
+            <button
+              onClick={handleLogout}
+              className="px-4 py-2 bg-red-500 rounded-lg hover:bg-red-600"
+            >
+              Logout
+            </button>
+          </>
+        )}
       </div>
     </nav>
   );
