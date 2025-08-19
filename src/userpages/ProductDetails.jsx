@@ -51,7 +51,7 @@ export default function ProductDetails() {
           ProductId: product._id,
           Quantity: quantity,
         });
-        navigate("/cart"); // ✅ only navigate after success
+        navigate("/cart"); 
       } catch (err) {
         console.error("Error adding to cart:", err);
         alert("Please login first to add items to cart.");

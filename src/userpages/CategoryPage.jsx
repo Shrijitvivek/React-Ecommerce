@@ -32,7 +32,7 @@ export default function CategoryPage() {
     <>
     <Navbar/>
    <div className="flex mt-5 p-5 gap-8 ml-15 mr-15 ">
-  {/* Sidebar */}
+
   <div className="w-1/4 bg-gray-100 p-4  rounded-lg shadow">
     <h2 className="text-lg font-bold mb-4">Categories</h2>
     <ul className="space-y-2">
@@ -55,7 +55,7 @@ export default function CategoryPage() {
     </ul>
   </div>
 
-  {/* Products */}
+
   <div className="w-3/4">
     {selectedCategoryId ? (
       <>

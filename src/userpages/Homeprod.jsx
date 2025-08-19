@@ -38,7 +38,7 @@ export default function Homeprod() {
       </h1>
 
       <div className="relative flex items-center">
-        {/* Left Arrow */}
+     
         <button
           onClick={scrollLeft}
           className="absolute left-0 z-10 bg-gray-200 p-2 rounded-full shadow hover:bg-gray-300"
@@ -46,7 +46,7 @@ export default function Homeprod() {
           ◀
         </button>
 
-        {/* Scrollable Container */}
+       
         <div
           ref={scrollRef}
           className="flex overflow-x-auto scroll-smooth space-x-4 p-4 
@@ -72,7 +72,7 @@ export default function Homeprod() {
           ))}
         </div>
 
-        {/* Right Arrow */}
+       
         <button
           onClick={scrollRight}
           className="absolute right-0 z-10 bg-gray-200 p-2 rounded-full shadow hover:bg-gray-300"

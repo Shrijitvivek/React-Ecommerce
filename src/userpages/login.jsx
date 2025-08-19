@@ -18,7 +18,7 @@ const handleLogin = async () => {
     console.log(response.data);
 
     if (response.data.message === "User logged in") {
-      navigate("/home");
+      navigate("/");
     } else {
       alert(response.data.message); 
     }

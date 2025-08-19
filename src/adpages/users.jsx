@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import Sidebar from './Sidebar'
-import { Link } from 'react-router-dom'
+
 
 
 export default function Users() {
@@ -38,7 +38,7 @@ export default function Users() {
             <td className="px-4 py-2 border-b">{user.email}</td>
             <td 
             className="px-4 py-2 border-b">
-              <img src={`http://localhost:2000/${user.image}`} 
+              <img src={`http://localhost:2000/upl${user.image}`} 
               className='w-35 h-45 rounded-full ' />
             </td>
            

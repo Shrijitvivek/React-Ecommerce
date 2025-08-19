@@ -47,17 +47,14 @@ export default function Profile() {
           Edit Profile
         </button>
         <button
-          onClick={async () => {
-            await api.get("/user/logout");
-            navigate("/home");
-          }}
-          className="px-4 py-2 bg-red-500 text-white rounded-lg"
+          onClick={() =>navigate('/cart/orders')}
+          className="px-4 py-2 bg-green-500 text-white rounded-lg"
         >
-          Logout
+          Order History
         </button>
       </div>
     </div>
-  )
+  
     </>
   )
   

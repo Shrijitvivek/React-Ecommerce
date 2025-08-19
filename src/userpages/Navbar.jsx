@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
-import { User , ShoppingCart } from "lucide-react"; // profile icon
+import { User , ShoppingCart } from "lucide-react"; 
 
 export default function Navbar() {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
-  // Check login status when Navbar loads
+
   useEffect(() => {
     api.get("/user/auth/check")
       .then((res) => {
@@ -22,9 +22,9 @@ export default function Navbar() {
 
   const handleLogout = async () => {
     try {
-      await api.get("/user/logout"); // 👈 call backend logout (map this to `lout`)
-      setUser(null); // 👈 immediately reset frontend state
-      navigate("/home");
+      await api.get("/user/logout"); 
+      setUser(null); 
+      navigate("/");
     } catch (err) {
       console.error("Logout failed:", err);
     }
@@ -35,7 +35,7 @@ export default function Navbar() {
       
       <h1
         className="text-2xl font-bold cursor-pointer"
-        onClick={() => navigate("/home")}
+        onClick={() => navigate("/")}
       >
         MyShop
       </h1>

@@ -42,6 +42,19 @@ const removeItem = async (productId) => {
   }
 };
 
+const placeOrder = async () =>{
+  try{
+    const res = await api.post('/user/orders')
+    alert('Order placed successfully')
+    setCart(null)
+    navigate('orders')
+  }
+  catch(err){
+    console.error('Error placing order' , err)
+    alert('Failed to place order')
+  }
+}
+
 
   if (!user) {
     return (
@@ -61,7 +74,7 @@ const removeItem = async (productId) => {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen">
         <h2 className="text-2xl font-semibold">Your Cart is empty</h2>
-        <button onClick={()=>navigate('/home')} className="m-5 bg-black text-xl text-white p-3 rounded-xl">Shop Products</button>
+        <button onClick={()=>navigate('/')} className="m-5 bg-black text-xl text-white p-3 rounded-xl">Shop Products</button>
       </div>
     );
   }
@@ -143,8 +156,8 @@ const removeItem = async (productId) => {
             <span className="text-xl">Total Amount</span>
             <span className="text-xl">₹{subtotal + 20}</span>
           </p>
-          <button className="w-full mt-4 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">
-            Checkout
+          <button onClick={placeOrder} className="w-full mt-4 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">
+            Place Order
           </button>
         </div>
       </div>
