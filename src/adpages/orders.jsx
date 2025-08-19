@@ -47,7 +47,7 @@ export default function Orders() {
               <th className="text-left px-4 py-2 border-b">Quantity</th>
               <th className="text-left px-4 py-2 border-b">Price</th>
               <th className="text-left px-4 py-2 border-b">SubTotal</th>
-              <th className="text-left px-4 py-2 border-b">Total</th>
+              <th className="text-left px-4 py-2 border-b">Total(incl. of all Taxes)</th>
               <th className="text-left px-4 py-2 border-b">Delivery Status</th>
             </tr>
           </thead>
@@ -56,7 +56,7 @@ export default function Orders() {
               orders.map((order) =>
                 order.Items.map((item, idx) => (
                   <tr key={`${order._id}-${idx}`} className="hover:bg-gray-50">
-                    {/* Username only in first row of order */}
+                   
                     {idx === 0 ? (
                       <td
                         className="px-4 py-2 border-b"
@@ -71,17 +71,17 @@ export default function Orders() {
                     <td className="px-4 py-2 border-b">₹{item.Price}</td>
                     <td className="px-4 py-2 border-b">₹{item.SubTotal}</td>
 
-                    {/* Total only in first row of order */}
+                  
                     {idx === 0 ? (
                       <td
                         className="px-4 py-2 border-b"
                         rowSpan={order.Items.length}
                       >
-                        ₹{order.Total}
+                        ₹{order.Total + 20}
                       </td>
                     ) : null}
 
-                    {/* Delivery Status only in first row of order */}
+                 
                     {idx === 0 ? (
                       <td
                         className="px-4 py-2 border-b"
@@ -93,9 +93,9 @@ export default function Orders() {
                             updateStatus(order._id, e.target.value)
                           }
                           className="border rounded px-2 py-1"
+                          disabled = {order.DeliveryStatus === 'Delivered'}
                         >
                           <option value="Pending">Pending</option>
-                          <option value="Processing">Processing</option>
                           <option value="Shipped">Shipped</option>
                           <option value="Delivered">Delivered</option>
                         </select>

@@ -86,8 +86,10 @@ export default function OrderHistory() {
 
               <div className="flex flex-col md:flex-row md:justify-between items-start md:items-center bg-gray-50 px-6 py-4 border-t border-gray-200">
                 <p className="text-2xl font-bold text-gray-800">
-                  Total: ₹{order.Total}
+                  Total: ₹{order.Total + 20}
+                   <p className="text-sm">(incl. of all taxes)</p>
                 </p>
+               
                 <span
                   className={`mt-2 md:mt-0 px-4 py-1.5 rounded-full text-sm font-medium ${
                     order.DeliveryStatus === "Pending"

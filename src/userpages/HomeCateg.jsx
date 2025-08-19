@@ -22,7 +22,7 @@ export default function BrowseTemplate() {
         
         <div
           className="bg-white rounded-lg overflow-hidden cursor-pointer shadow hover:shadow-lg transition"
-          onClick={() =>navigate(`/user/categories/687dc5fdd65009b81e993377`)}
+          onClick={() =>navigate(`/categories/687dc5fdd65009b81e993377`)}
         >
           <img src={phonelap} className="w-full h-60" />
           <div className=" text-center p-5 text-2xl font-bold">Phones and Laptops</div>
@@ -30,7 +30,7 @@ export default function BrowseTemplate() {
 
         <div
           className="bg-white rounded-lg overflow-hidden cursor-pointer shadow hover:shadow-lg transition"
-          onClick={() => navigate(`/user/categories?selected=${CategoryPage}`)}
+          onClick={() => navigate(`/categories/6895dd0b1627838b92c8e878`)}
         >
           <img src={books} className="w-full h-60" />
           <div className="text-center p-5 text-2xl font-bold">Books and Stationery</div>
@@ -38,7 +38,7 @@ export default function BrowseTemplate() {
 
         <div
           className="bg-white rounded-lg overflow-hidden cursor-pointer shadow hover:shadow-lg transition"
-          onClick={() =>navigate(`/user/categories?selected=${CategoryPage}`)}
+          onClick={() =>navigate(`/categories/689727b7530b0df3e863301e`)}
         >
           <img src={snacks} className="w-full h-60" />
           <div className="text-center p-5 text-2xl font-bold">Beverages and Snacks</div>
@@ -46,7 +46,7 @@ export default function BrowseTemplate() {
 
         <div
           className="bg-white rounded-lg overflow-hidden cursor-pointer shadow hover:shadow-lg transition"
-          onClick={() =>navigate(`/user/categories?selected=${CategoryPage}`)}
+          onClick={() =>navigate(`/categories/689af77989b8bb0453adbb1d`)}
         >
           <img src={homeappl}className="w-full h-60" />
           <div className="text-center p-5 text-2xl font-bold">Home Appliances</div>

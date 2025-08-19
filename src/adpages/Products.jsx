@@ -5,37 +5,30 @@ import Sidebar from './Sidebar';
 
 export default function Products() {
   const [prod, setProd] = useState([]);
-
-  const fetchProducts = () => {
-    axios.get('http://localhost:2000/admin/products', { withCredentials: true })
-      .then((res) => {
-        if (res.data && Array.isArray(res.data.products)) {
-          setProd(res.data.products);
-        } else {
-          setProd([]);
-        }
-      })
-      .catch(() => {
-        setProd([]);
-      });
-  };
+  const [currentPage, SetCurrentPage] = useState(1)
+  const ProductsPerPage = 3
 
   useEffect(() => {
-    fetchProducts();
+    axios
+      .get("http://localhost:2000/admin/products", { withCredentials: true })
+      .then((res) => setProd(res.data.products || []))
+      .catch(() => setProd([]));
   }, []);
 
   const handleDelete = (id) => {
-    if (window.confirm('Are you sure you want to delete this product?')) {
-      axios.delete(`http://localhost:2000/admin/products/${id}`, { withCredentials: true })
-        .then(() => {
-          fetchProducts(); 
-        })
-        .catch((err) => {
-          console.error('Failed to delete', err);
-          alert('Failed to delete product');
-        });
+    if (window.confirm("Delete this product?")) {
+      axios
+        .delete(`http://localhost:2000/admin/products/${id}`, { withCredentials: true })
+        .then(() => setProd(prod.filter((p) => p._id !== id)));
     }
   };
+
+  // Pagination variables logic
+  const lastIndex = currentPage * ProductsPerPage
+  const firstIndex = lastIndex - ProductsPerPage
+  const currentProducts = prod.slice(firstIndex, lastIndex)
+  const TotalPages = Math.ceil(prod.length / ProductsPerPage)
+
   return (
     <div className="ml-50 p-8">
       <Sidebar />
@@ -60,8 +53,8 @@ export default function Products() {
             </tr>
           </thead>
           <tbody>
-            {Array.isArray(prod) && prod.length > 0 ? (
-              prod.map((product, index) => (
+            {currentProducts.length > 0 ? (
+              currentProducts.map((product, index) => (
                 <tr key={index} className="hover:bg-gray-50">
                   <td className="px-4 py-2 border-b">{product.ProductName}</td>
                   <td className="px-4 py-2 border-b">{product.Price}</td>
@@ -94,7 +87,7 @@ export default function Products() {
                     </Link>
 
 
-                    <button onClick={()=>handleDelete(product._id)}className="bg-red-500 text-white my-3 px-4 mx-5 py-1 rounded hover:bg-red-600">
+                    <button onClick={() => handleDelete(product._id)} className="bg-red-500 text-white my-3 px-4 mx-5 py-1 rounded hover:bg-red-600">
                       Delete
                     </button>
                   </td>
@@ -109,6 +102,25 @@ export default function Products() {
             )}
           </tbody>
         </table>
+
+        {TotalPages > 1 && (
+          <div className="flex justify-center mt-4 space-x-2">
+            <button onClick={() => SetCurrentPage((p) => Math.max(p - 1, 1))}
+              disabled={currentPage === 1}
+              className="px-3 py-1 border rounded disabled:opacity-50">Prev</button>
+              
+            <button
+              onClick={() => SetCurrentPage((p) => Math.min(p + 1, TotalPages))}
+              disabled={currentPage === TotalPages}
+              className="px-3 py-1 border rounded disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
+
+        )}
+
+
       </div>
     </div>
   );
