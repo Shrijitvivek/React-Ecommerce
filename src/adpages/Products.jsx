@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Sidebar from './Sidebar';
@@ -24,10 +24,19 @@ export default function Products() {
   };
 
   // Pagination variables logic
-  const lastIndex = currentPage * ProductsPerPage
+
+  const {currentProducts , TotalPages} = useMemo(()=>{
+      const lastIndex = currentPage * ProductsPerPage
   const firstIndex = lastIndex - ProductsPerPage
-  const currentProducts = prod.slice(firstIndex, lastIndex)
-  const TotalPages = Math.ceil(prod.length / ProductsPerPage)
+
+  return {
+ currentProducts: prod.slice(firstIndex, lastIndex),
+   TotalPages: Math.ceil(prod.length / ProductsPerPage)
+
+  }
+  
+
+  },[prod , currentPage])
 
   return (
     <div className="ml-50 p-8">
