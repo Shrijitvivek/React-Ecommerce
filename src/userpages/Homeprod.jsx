@@ -1,85 +1,72 @@
-import React, { useState, useEffect, useRef } from "react";
-import api from "../api/axios";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import api from "../api/axios"; // axios instance
 
-export default function Homeprod() {
+export default function Products() {
   const [products, setProducts] = useState([]);
-  const img = "http://localhost:2000/";
-  const navigate = useNavigate();
-  const scrollRef = useRef(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
+  // fetch products
   useEffect(() => {
-    api
-      .get("/user/products")
-      .then((res) => {
-        if (Array.isArray(res.data)) {
-          setProducts(res.data);
-        } else if (Array.isArray(res.data.products)) {
-          setProducts(res.data.products);
-        } else {
-          console.error("Unexpected response format", res.data);
-        }
-      })
-      .catch((err) => console.error(err));
+    const fetchProducts = async () => {
+      try {
+        const res = await api.get("/products");
+        setProducts(res.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchProducts();
   }, []);
 
-  const scrollLeft = () => {
-    scrollRef.current.scrollBy({ left: -200, behavior: "smooth" });
-  };
-
-  const scrollRight = () => {
-    scrollRef.current.scrollBy({ left: 200, behavior: "smooth" });
-  };
+  // filter products based on search query
+  const filteredProducts = products.filter((p) =>
+    p.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
-    <>
-      <h1 className="text-center text-4xl font-extrabold my-5">
-        AVAILABLE PRODUCTS
-      </h1>
-
-      <div className="relative flex items-center">
-     
+    <div className="p-6">
+      {/* Search bar */}
+      <div className="flex justify-center mb-6">
+        <input
+          type="text"
+          placeholder="Search products..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full max-w-md p-2 border rounded-l-lg focus:outline-none"
+        />
         <button
-          onClick={scrollLeft}
-          className="absolute left-0 z-10 bg-gray-200 p-2 rounded-full shadow hover:bg-gray-300"
+          onClick={() => {}}
+          className="px-4 py-2 bg-blue-500 text-white rounded-r-lg hover:bg-blue-600"
         >
-          ◀
-        </button>
-
-       
-        <div
-          ref={scrollRef}
-          className="flex overflow-x-auto scroll-smooth space-x-4 p-4 
-             [scrollbar-width:none] [-ms-overflow-style:none] 
-             [&::-webkit-scrollbar]:hidden"
-        >
-          {products.map((product) => (
-            <div
-              key={product._id}
-              className=" mt-5 flex-shrink-0 w-64 bg-white rounded-lg shadow-md p-4 cursor-pointer hover:shadow-lg transition-shadow"
-              onClick={() => navigate(`/product/${product._id}`)}
-            >
-              <img
-                src={img + product.ProductImage}
-                alt={product.ProductName}
-                className="h-60 w-50 "
-              />
-              <h2 className="text-lg font-semibold mt-3">
-                {product.ProductName}
-              </h2>
-              <p className="text-blue-600 font-bold mt-2">₹{product.Price}</p>
-            </div>
-          ))}
-        </div>
-
-       
-        <button
-          onClick={scrollRight}
-          className="absolute right-0 z-10 bg-gray-200 p-2 rounded-full shadow hover:bg-gray-300"
-        >
-          ▶
+          Search
         </button>
       </div>
-    </>
+
+      {/* Products Grid */}
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {filteredProducts.length > 0 ? (
+          filteredProducts.map((product) => (
+            <div
+              key={product._id}
+              className="bg-white rounded-lg shadow hover:shadow-lg transition transform hover:-translate-y-1"
+            >
+              <img
+                src={product.image}
+                alt={product.name}
+                className="w-full h-48 object-cover rounded-t-lg"
+              />
+              <div className="p-4">
+                <h2 className="text-lg font-semibold">{product.name}</h2>
+                <p className="text-gray-600">₹{product.price}</p>
+              </div>
+            </div>
+          ))
+        ) : (
+          <p className="col-span-full text-center text-gray-500">
+            No products found
+          </p>
+        )}
+      </div>
+    </div>
   );
 }

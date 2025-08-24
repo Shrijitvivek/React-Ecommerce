@@ -1,33 +1,40 @@
-import React, { useState } from 'react'
-import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
+import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const navigate = useNavigate()
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState(""); 
+  const navigate = useNavigate();
 
-const handleLogin = async () => {
-  try {
-    const response = await axios.post(
-      "http://localhost:2000/user/login",
-      { email, password },
-      { withCredentials: true }
-    );
+  const handleLogin = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        "http://localhost:2000/user/login",
+        { email, password },
+        { withCredentials: true }
+      );
 
-    console.log(response.data);
+      console.log(response.data);
 
-    if (response.data.message === "User logged in") {
-      navigate("/");
-    } else {
-      alert(response.data.message); 
+      if (response.data.message === "User logged in") {
+        navigate("/");
+      } else {
+        setMessage(response.data.message);
+      }
+    } catch (error) {
+      console.error("Login error", error);
+      const msg =
+        error.response?.data?.message ||
+        "Something went wrong. Please try again.";
+      setMessage(msg);
+    } finally {
+      setLoading(false);
     }
-  } catch (error) {
-    console.error("Login error", error);
-    alert("Something went wrong. Please try again.");
-  }
-};
-
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -37,7 +44,10 @@ const handleLogin = async () => {
         </h1>
 
         <div className="mb-4">
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="email"
+            className="block text-sm font-medium text-gray-700"
+          >
             Email
           </label>
           <input
@@ -51,7 +61,10 @@ const handleLogin = async () => {
         </div>
 
         <div className="mb-6">
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="password"
+            className="block text-sm font-medium text-gray-700"
+          >
             Password
           </label>
           <input
@@ -66,13 +79,23 @@ const handleLogin = async () => {
 
         <button
           onClick={handleLogin}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md transition duration-300"
+          disabled={loading}
+          className={`w-full ${
+            loading
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-blue-600 hover:bg-blue-700"
+          } text-white font-semibold py-2 px-4 rounded-md transition duration-300`}
         >
-          Login
+          {loading ? "Logging in..." : "Login"}
         </button>
+
+      
+        {message && (
+          <p className="mt-4 text-center text-red-600 font-medium">{message}</p>
+        )}
       </div>
     </div>
-  )
+  );
 }
 
-export default Login
+export default Login;
