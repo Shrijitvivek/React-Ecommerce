@@ -60,7 +60,7 @@ export default function Users() {
                 <td className="px-4 py-2 border-b">
                   <img
                     src={`http://localhost:2000/upload/${user.image}`}
-                    className="w-16 h-16 rounded-full object-cover"
+                    className="w-26 h-26 rounded-full object-cover"
                     alt={user.name}
                   />
                 </td>
