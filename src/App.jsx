@@ -19,7 +19,8 @@ import Profile from "./userpages/Profile"
 import EditProfile from "./userpages/Editprof"
 import Register from "./userpages/Register"
 import OrderHistory from "./userpages/OrderHistory"
-import SearchPage from "./userpages/SearchPage"
+
+
 
 
 
@@ -51,7 +52,8 @@ function App() {
          <Route path="/edit/:id" element={<EditProfile/>}/>
          <Route path='/register' element={<Register/>}/>
          <Route path="/cart/orders" element={<OrderHistory/>}/>
-         <Route path ='/search' element={<SearchPage/>}/>
+       
+         
      
 
         
