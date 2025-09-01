@@ -1,7 +1,7 @@
 import Adlogin from "./adpages/adlogin"
 import Admindash from "./adpages/Admindash"
 import { Routes, Route } from 'react-router-dom'
-import Products from "./adpages/products"
+import Products from "./adpages/Products"
 import Users from "./adpages/users"
 import Category from "./adpages/categories"
 import Addcat from "./adpages/addcat"
