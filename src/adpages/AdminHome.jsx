@@ -12,6 +12,7 @@ export default function AdminHome() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
+        // Use relative path for Nginx proxy
         const res = await api.get("/admin/dashboard-counts"); 
         console.log("API Response:", res.data); 
         setStats(res.data); 

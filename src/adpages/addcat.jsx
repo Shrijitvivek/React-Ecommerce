@@ -9,7 +9,7 @@ export default function Addcat() {
     const navigate = useNavigate();
 
     const handleSave = () => {
-        axios.post('http://localhost:2000/admin/categories', { name, description }, 
+        axios.post('/admin/categories', { name, description }, 
             { withCredentials: true }
         )
         .then(() => {

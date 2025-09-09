@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
+import api from "../api/axios"; // centralized API instance
 import Sidebar from "./Sidebar";
 
 export default function Editprod() {
@@ -16,13 +16,12 @@ export default function Editprod() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Fetch product details
   useEffect(() => {
-    axios
-      .get(`http://localhost:2000/admin/products/${id}`, { withCredentials: true })
+    api.get(`/admin/products/${id}`)
       .then((res) => {
-        console.log("Fetched product:", res.data.product);
-        if (res.data?.product) {
-          const prod = res.data.product;
+        const prod = res.data.product;
+        if (prod) {
           setName(prod.ProductName || "");
           setDesc(prod.Description || "");
           setPrice(prod.Price || "");
@@ -37,12 +36,11 @@ export default function Editprod() {
       });
   }, [id]);
 
-  
+  // Fetch categories
   useEffect(() => {
-    axios
-      .get("http://localhost:2000/admin/categories", { withCredentials: true })
+    api.get("/admin/categories")
       .then((res) => {
-        if (res.data && Array.isArray(res.data)) {
+        if (Array.isArray(res.data)) {
           setCategories(res.data);
         } else if (res.data.categories) {
           setCategories(res.data.categories);
@@ -60,17 +58,11 @@ export default function Editprod() {
     formData.append("Price", price);
     formData.append("Category", categ);
     formData.append("Stock", stock);
-    if (image) {
-      formData.append("ProductImage", image);
-    }
+    if (image) formData.append("ProductImage", image);
 
-    axios
-      .put(`http://localhost:2000/admin/products/${id}`, formData, {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
+    api.put(`/admin/products/${id}`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    })
       .then(() => {
         navigate("/products");
       })
@@ -79,7 +71,7 @@ export default function Editprod() {
       });
   };
 
-
+  if (loading) return <p className="p-8">Loading...</p>;
 
   return (
     <div className="flex">

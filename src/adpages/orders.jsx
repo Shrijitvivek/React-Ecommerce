@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api/axios"; // centralized API instance
 import Sidebar from "./Sidebar";
 
 export default function Orders() {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:2000/admin/orders", { withCredentials: true })
+    api.get("/admin/orders")
       .then((res) => {
         if (Array.isArray(res.data)) {
           setOrders(res.data);
@@ -15,22 +14,17 @@ export default function Orders() {
           console.error("Unexpected data format:", res.data);
         }
       })
-      .catch((err) => console.error("Error:", err));
+      .catch((err) => console.error("Error fetching orders:", err));
   }, []);
 
   const updateStatus = (id, status) => {
-    axios
-      .put(
-        `http://localhost:2000/admin/orders/${id}`,
-        { deliveryStatus: status },
-        { withCredentials: true }
-      )
+    api.put(`/admin/orders/${id}`, { deliveryStatus: status })
       .then(() => {
         setOrders((prev) =>
           prev.map((o) => (o._id === id ? { ...o, DeliveryStatus: status } : o))
         );
       })
-      .catch((err) => console.error(err));
+      .catch((err) => console.error("Error updating status:", err));
   };
 
   return (
@@ -56,51 +50,34 @@ export default function Orders() {
               orders.map((order) =>
                 order.Items.map((item, idx) => (
                   <tr key={`${order._id}-${idx}`} className="hover:bg-gray-50">
-                   
-                    {idx === 0 ? (
-                      <td
-                        className="px-4 py-2 border-b"
-                        rowSpan={order.Items.length}
-                      >
+                    {idx === 0 && (
+                      <td className="px-4 py-2 border-b" rowSpan={order.Items.length}>
                         {order.UserName}
                       </td>
-                    ) : null}
-
+                    )}
                     <td className="px-4 py-2 border-b">{item.ProductName}</td>
                     <td className="px-4 py-2 border-b">{item.Quantity}</td>
                     <td className="px-4 py-2 border-b">₹{item.Price}</td>
                     <td className="px-4 py-2 border-b">₹{item.SubTotal}</td>
-
-                  
-                    {idx === 0 ? (
-                      <td
-                        className="px-4 py-2 border-b"
-                        rowSpan={order.Items.length}
-                      >
+                    {idx === 0 && (
+                      <td className="px-4 py-2 border-b" rowSpan={order.Items.length}>
                         ₹{order.Total + 20}
                       </td>
-                    ) : null}
-
-                 
-                    {idx === 0 ? (
-                      <td
-                        className="px-4 py-2 border-b"
-                        rowSpan={order.Items.length}
-                      >
+                    )}
+                    {idx === 0 && (
+                      <td className="px-4 py-2 border-b" rowSpan={order.Items.length}>
                         <select
                           value={order.DeliveryStatus || ""}
-                          onChange={(e) =>
-                            updateStatus(order._id, e.target.value)
-                          }
+                          onChange={(e) => updateStatus(order._id, e.target.value)}
                           className="border rounded px-2 py-1"
-                          disabled = {order.DeliveryStatus === 'Delivered'}
+                          disabled={order.DeliveryStatus === "Delivered"}
                         >
                           <option value="Pending">Pending</option>
                           <option value="Shipped">Shipped</option>
                           <option value="Delivered">Delivered</option>
                         </select>
                       </td>
-                    ) : null}
+                    )}
                   </tr>
                 ))
               )
@@ -117,5 +94,3 @@ export default function Orders() {
     </div>
   );
 }
-
-

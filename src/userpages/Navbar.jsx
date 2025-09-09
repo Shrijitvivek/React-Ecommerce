@@ -5,17 +5,22 @@ import { User, ShoppingCart } from "lucide-react";
 
 export default function Navbar() {
   const [user, setUser] = useState(null);
-  const [search, setSearch] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
-    api
-      .get("/user/auth/check")
-      .then((res) => {
-        if (res.data.loggedIn) setUser(res.data.user);
-        else setUser(null);
-      })
-      .catch(() => setUser(null));
+    const checkAuth = async () => {
+      try {
+        const res = await api.get("/user/auth/check");
+        if (res.data.loggedIn) {
+          setUser(res.data.user);
+        } else {
+          setUser(null);
+        }
+      } catch {
+        setUser(null);
+      }
+    };
+    checkAuth();
   }, []);
 
   const handleLogout = async () => {
@@ -28,12 +33,9 @@ export default function Navbar() {
     }
   };
 
-
-
   return (
     <nav className="w-full bg-black text-white shadow-md px-4 sm:px-6 lg:px-8 py-4">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 md:gap-0">
-
         {/* Logo */}
         <h1
           className="text-2xl font-bold cursor-pointer hover:text-blue-400 transition"
@@ -41,8 +43,6 @@ export default function Navbar() {
         >
           MyShop
         </h1>
-
-       
 
         {/* Right Section */}
         <div className="flex items-center gap-4">

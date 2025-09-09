@@ -5,25 +5,35 @@ import api from "../api/axios";
 export default function EditProfile() {
   const { id } = useParams();
   const [form, setForm] = useState({ name: "", email: "", image: null });
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    api.get("/user/auth/check").then((res) => {
-      if (res.data.loggedIn) {
-        setForm({
-          name: res.data.user.name,
-          email: res.data.user.email,
-          image: null,
-        });
-      } else {
+    const fetchUser = async () => {
+      try {
+        const res = await api.get("/user/auth/check");
+        if (res.data.loggedIn) {
+          setForm({
+            name: res.data.user.name || "",
+            email: res.data.user.email || "",
+            image: null,
+          });
+        } else {
+          navigate("/uselogin");
+        }
+      } catch (err) {
+        console.error("Auth check failed:", err);
         navigate("/uselogin");
+      } finally {
+        setLoading(false);
       }
-    });
+    };
+    fetchUser();
   }, [navigate]);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    setForm({ ...form, [name]: files ? files[0] : value });
+    setForm((prev) => ({ ...prev, [name]: files ? files[0] : value }));
   };
 
   const handleSubmit = async (e) => {
@@ -34,26 +44,65 @@ export default function EditProfile() {
       data.append("email", form.email);
       if (form.image) data.append("image", form.image);
 
-      await api.put(`/user/edit/${id}`, data);
+      await api.put(`/user/edit/${id}`, data, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
       alert("Profile updated!");
       navigate("/profile");
     } catch (err) {
-      console.error(err);
-      alert("Update failed");
+      console.error("Update failed:", err);
+      alert("Update failed, please try again.");
     }
   };
+
+  if (loading) {
+    return (
+      <div className="text-center mt-10 text-lg font-semibold">
+        Loading profile...
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
       <h2 className="text-2xl font-bold mb-6">Edit Profile</h2>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-       <label >Name</label>
-        <input name="name" type="text" value={form.name} onChange={handleChange} className="border p-2 rounded" />
-        <label >Email</label>
-        <input name="email" type="email" value={form.email} onChange={handleChange} className="border p-2 rounded" />
-        <label >Image</label>
-        <input name="image" type="file" accept="image/*" onChange={handleChange} className="border p-2 rounded" />
-        <button type="submit" className="bg-green-500 text-white p-2 rounded">Update</button>
+        <label className="font-medium">Name</label>
+        <input
+          name="name"
+          type="text"
+          value={form.name}
+          onChange={handleChange}
+          className="border p-2 rounded"
+          required
+        />
+
+        <label className="font-medium">Email</label>
+        <input
+          name="email"
+          type="email"
+          value={form.email}
+          onChange={handleChange}
+          className="border p-2 rounded"
+          required
+        />
+
+        <label className="font-medium">Image</label>
+        <input
+          name="image"
+          type="file"
+          accept="image/*"
+          onChange={handleChange}
+          className="border p-2 rounded"
+        />
+
+        <button
+          type="submit"
+          className="bg-green-600 hover:bg-green-700 text-white p-2 rounded transition"
+        >
+          Update
+        </button>
       </form>
     </div>
   );

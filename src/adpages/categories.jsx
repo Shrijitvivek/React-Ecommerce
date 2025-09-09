@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api/axios'; // use the central API instance
 import Sidebar from './Sidebar';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 export default function Category() {
   const [categ, setCateg] = useState([]);
-  const navigate = useNavigate();
 
   const fetchCategories = () => {
-    axios.get('http://localhost:2000/admin/categories', { withCredentials: true })
+    api.get('/admin/categories') // relative path via api instance
       .then((res) => {
         setCateg(res.data.categories || []);
       })
@@ -23,10 +22,8 @@ export default function Category() {
 
   const handleDelete = (id) => {
     if (window.confirm('Are you sure you want to delete this category?')) {
-      axios.delete(`http://localhost:2000/admin/categories/${id}`, { withCredentials: true })
-        .then(() => {
-         fetchCategories()
-        })
+      api.delete(`/admin/categories/${id}`) // relative path via api instance
+        .then(() => fetchCategories())
         .catch((err) => {
           console.error('Failed to delete category:', err);
           alert('Failed to delete category');
@@ -37,10 +34,10 @@ export default function Category() {
   return (
     <div className="ml-50 p-8">
       <Sidebar />
-      <div className='flex justify-between'>
+      <div className="flex justify-between">
         <h1 className="text-2xl font-bold mb-6">Categories</h1>
         <Link to='addcat'>
-          <button className='bg-green-500 p-2 rounded'> + Add New Category</button>
+          <button className='bg-green-500 p-2 rounded'>+ Add New Category</button>
         </Link>
       </div>
 

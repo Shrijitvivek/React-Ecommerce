@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../api/axios";
 import { Trash2, Plus, Minus } from "lucide-react";
+import api from "../api/axios";
 import Navbar from "./Navbar";
 
 export default function Cart() {
@@ -10,17 +10,21 @@ export default function Cart() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Check if user is authenticated
     api.get("/user/auth/check")
-      .then((res) => setUser(res.data.user || null))
+      .then(res => setUser(res.data.user || null))
       .catch(() => setUser(null));
 
     fetchCart();
   }, []);
 
-  const fetchCart = () => {
-    api.get("/user/cart")
-      .then((res) => setCart(res.data.UserCart[0]))
-      .catch(() => setCart(null));
+  const fetchCart = async () => {
+    try {
+      const res = await api.get("/user/cart");
+      setCart(res.data.UserCart?.[0] || null);
+    } catch {
+      setCart(null);
+    }
   };
 
   const updateQuantity = async (productId, newQty) => {
@@ -45,11 +49,11 @@ export default function Cart() {
   const placeOrder = async () => {
     try {
       await api.post("/user/orders");
-      alert("Order placed successfully");
+      alert("Order placed successfully!");
       setCart(null);
-      navigate("orders");
+      navigate("/orders");
     } catch (err) {
-      console.error("Error placing order", err);
+      console.error("Error placing order:", err);
       alert("Failed to place order");
     }
   };
@@ -82,7 +86,7 @@ export default function Cart() {
     );
   }
 
-  const subtotal = cart.Total[0]?.Total || 0;
+  const subtotal = cart.Total?.[0]?.Total || 0;
 
   return (
     <>
@@ -100,9 +104,9 @@ export default function Cart() {
               >
                 {/* Product Image */}
                 <img
-                  src={`http://localhost:2000/${item.Proddet.ProductImage}`}
+                  src={`/${item.Proddet.ProductImage}`} // Nginx-friendly relative path
                   alt={item.Proddet.ProductName}
-                  className="w-32 h-32  rounded-md cursor-pointer hover:scale-105 transition"
+                  className="w-32 h-32 rounded-md cursor-pointer hover:scale-105 transition"
                   onClick={() => navigate(`/product/${item.Proddet._id}`)}
                 />
 

@@ -9,7 +9,7 @@ function Adlogin() {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('http://localhost:2000/admin/login', {
+      const response = await axios.post('/admin/login', {  // <-- changed here
         email, password
       }, {
         withCredentials: true
@@ -18,7 +18,7 @@ function Adlogin() {
       console.log(response.data)
 
       if (response.data.message1) {
-        localStorage.setItem('admin' , true)
+        localStorage.setItem('admin', true)
         navigate('/admindash')
       }
     } catch (error) {

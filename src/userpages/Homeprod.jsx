@@ -1,30 +1,38 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
 
 export default function Homeprod() {
   const [products, setProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]); 
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [search, setSearch] = useState("");
-  const [visibleCount, setVisibleCount] = useState(8); 
-  const img = "http://localhost:2000/";
+  const [visibleCount, setVisibleCount] = useState(8);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  // ✅ Use relative path instead of hardcoded localhost (Nginx friendly)
+  const imgBase = "/uploads/";
+
   useEffect(() => {
-    api
-      .get("/user/products")
-      .then((res) => {
+    const fetchProducts = async () => {
+      try {
+        const res = await api.get("/user/products");
         const prods = Array.isArray(res.data) ? res.data : res.data.products;
         setProducts(prods);
-        setFilteredProducts(prods); 
-      })
-      .catch((err) => console.error(err));
+        setFilteredProducts(prods);
+      } catch (err) {
+        console.error("Failed to fetch products:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
   }, []);
 
- 
   useEffect(() => {
     const filtered = products.filter((p) =>
-      p.ProductName.toLowerCase().includes(search.toLowerCase())
+      p.ProductName?.toLowerCase().includes(search.toLowerCase())
     );
     setFilteredProducts(filtered);
   }, [search, products]);
@@ -32,6 +40,14 @@ export default function Homeprod() {
   const handleLoadMore = () => {
     setVisibleCount((prev) => prev + 8);
   };
+
+  if (loading) {
+    return (
+      <div className="text-center mt-10 text-lg font-semibold">
+        Loading products...
+      </div>
+    );
+  }
 
   return (
     <div className="px-4 sm:px-6 lg:px-12 py-8 bg-gray-50">
@@ -63,9 +79,9 @@ export default function Homeprod() {
                 className="bg-white rounded-xl shadow-md hover:shadow-lg transition duration-300 cursor-pointer"
               >
                 <img
-                  src={img + product.ProductImage}
+                  src={imgBase + product.ProductImage}
                   alt={product.ProductName}
-                  className="ml-5 mt-5 h-52 w-52 rounded-t-xl"
+                  className="ml-5 mt-5 h-52 w-52 rounded-t-xl object-cover"
                 />
                 <div className="p-4">
                   <h2 className="text-lg font-semibold text-gray-800 truncate">

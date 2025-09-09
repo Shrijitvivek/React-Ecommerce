@@ -8,22 +8,19 @@ export default function OrderHistory() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    api
-      .get("/user/orders")
-      .then((res) => setOrders(res.data || []))
-      .catch((err) => console.error("Error fetching orders", err));
+    const fetchOrders = async () => {
+      try {
+        const res = await api.get("/user/orders");
+        setOrders(res.data || []);
+      } catch (err) {
+        console.error("Error fetching orders:", err);
+      }
+    };
+    fetchOrders();
   }, []);
 
-  if (!orders.length) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-pink-100 via-purple-100 to-blue-100">
-        <h2 className="text-3xl font-extrabold text-gray-800">No Orders Yet</h2>
-        <p className="text-gray-600 mt-2">Your order history will appear here</p>
-      </div>
-    );
-  }
-
   const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
     const options = {
       year: "numeric",
       month: "short",
@@ -33,6 +30,15 @@ export default function OrderHistory() {
     };
     return new Date(dateString).toLocaleDateString("en-IN", options);
   };
+
+  if (!orders.length) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-pink-100 via-purple-100 to-blue-100">
+        <h2 className="text-3xl font-extrabold text-gray-800">No Orders Yet</h2>
+        <p className="text-gray-600 mt-2">Your order history will appear here</p>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -49,8 +55,8 @@ export default function OrderHistory() {
 
           {orders.map((order, idx) => (
             <div
-              key={idx}
-              className={`relative flex flex-col md:flex-row items-center md:justify-between mb-12`}
+              key={order._id || idx}
+              className="relative flex flex-col md:flex-row items-center md:justify-between mb-12"
             >
               {/* Dot */}
               <div className="absolute left-4 md:left-1/2 w-6 h-6 bg-white border-4 border-purple-500 rounded-full transform -translate-x-1/2"></div>
@@ -72,9 +78,9 @@ export default function OrderHistory() {
 
                 {/* Items */}
                 <div className="space-y-3">
-                  {order.Items.map((item, i) => (
+                  {(order.Items || []).map((item, i) => (
                     <div
-                      key={i}
+                      key={item.ProductId || i}
                       className="flex justify-between items-center bg-gray-50 p-3 rounded-lg hover:bg-purple-50 transition cursor-pointer"
                       onClick={() => navigate(`/product/${item.ProductId}`)}
                     >
@@ -96,7 +102,7 @@ export default function OrderHistory() {
                 {/* Footer */}
                 <div className="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center mt-6 border-t pt-4">
                   <p className="text-lg font-bold text-gray-800">
-                    Total: ₹{order.Total + 20}
+                    Total: ₹{(order.Total || 0) + 20}
                     <span className="block text-sm text-gray-500">
                       (incl. of all taxes)
                     </span>
@@ -110,7 +116,7 @@ export default function OrderHistory() {
                         : "bg-gray-200 text-gray-700"
                     }`}
                   >
-                    {order.DeliveryStatus}
+                    {order.DeliveryStatus || "Unknown"}
                   </span>
                 </div>
               </div>

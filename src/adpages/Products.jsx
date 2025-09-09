@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { Link } from "react-router-dom";
 import Sidebar from "./Sidebar";
+import api from "../api/axios"; // centralized API instance
 
 export default function Products() {
   const [prod, setProd] = useState([]);
@@ -9,14 +9,9 @@ export default function Products() {
   const [totalPages, setTotalPages] = useState(1);
   const ProductsPerPage = 3;
 
-
   const fetchProducts = async (page) => {
     try {
-      const res = await axios.get(
-        `http://localhost:2000/admin/products?page=${page}&limit=${ProductsPerPage}`,
-        { withCredentials: true }
-      );
-
+      const res = await api.get(`/admin/products?page=${page}&limit=${ProductsPerPage}`);
       setProd(res.data.products || []);
       setTotalPages(res.data.totalPages || 1);
     } catch (err) {
@@ -31,11 +26,12 @@ export default function Products() {
 
   const handleDelete = async (id) => {
     if (window.confirm("Delete this product?")) {
-      await axios.delete(`http://localhost:2000/admin/products/${id}`, {
-        withCredentials: true,
-      });
-    
-      fetchProducts(currentPage);
+      try {
+        await api.delete(`/admin/products/${id}`);
+        fetchProducts(currentPage);
+      } catch (err) {
+        console.error("Failed to delete product:", err);
+      }
     }
   };
 
@@ -69,15 +65,13 @@ export default function Products() {
               prod.map((product, index) => (
                 <tr key={index} className="hover:bg-gray-50">
                   <td className="px-4 py-2 border-b">{product.ProductName}</td>
-                  <td className="px-4 py-2 border-b">{product.Price}</td>
+                  <td className="px-4 py-2 border-b">₹{product.Price}</td>
                   <td className="px-4 py-2 border-b">{product.Description}</td>
-                  <td className="px-4 py-2 border-b">
-                    {product.Category?.name || "No Category"}
-                  </td>
+                  <td className="px-4 py-2 border-b">{product.Category?.name || "No Category"}</td>
                   <td className="px-4 py-2 border-b">
                     {product.ProductImage ? (
                       <img
-                        src={`http://localhost:2000/${product.ProductImage}`}
+                        src={`/${product.ProductImage}`} // relative path for nginx
                         className="w-30 h-30"
                         alt={product.ProductName}
                       />
@@ -125,9 +119,7 @@ export default function Products() {
               Page {currentPage} of {totalPages}
             </span>
             <button
-              onClick={() =>
-                setCurrentPage((p) => Math.min(p + 1, totalPages))
-              }
+              onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
               disabled={currentPage === totalPages}
               className="px-3 py-1 border rounded disabled:opacity-50"
             >

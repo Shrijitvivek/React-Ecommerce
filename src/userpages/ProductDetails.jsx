@@ -5,15 +5,20 @@ import Navbar from "./Navbar";
 
 export default function ProductDetails() {
   const { id } = useParams();
-  const [product, SetProduct] = useState(null);
-  const [quantity, SetQuantity] = useState(1);
+  const [product, setProduct] = useState(null);
+  const [quantity, setQuantity] = useState(1);
   const navigate = useNavigate();
 
   useEffect(() => {
-    api
-      .get(`/user/products/${id}`)
-      .then((res) => SetProduct(res.data.product))
-      .catch((err) => console.error(err));
+    const fetchProduct = async () => {
+      try {
+        const res = await api.get(`/user/products/${id}`);
+        setProduct(res.data?.product || null);
+      } catch (err) {
+        console.error("Error fetching product:", err);
+      }
+    };
+    fetchProduct();
   }, [id]);
 
   if (!product) {
@@ -24,6 +29,19 @@ export default function ProductDetails() {
     );
   }
 
+  const handleAddToCart = async () => {
+    try {
+      await api.post("/user/cart", {
+        ProductId: product._id,
+        Quantity: quantity,
+      });
+      navigate("/cart");
+    } catch (err) {
+      console.error("Error adding to cart:", err);
+      alert("Please login first to add items to cart.");
+    }
+  };
+
   return (
     <>
       <Navbar />
@@ -32,9 +50,9 @@ export default function ProductDetails() {
           {/* Product Image */}
           <div className="flex justify-center items-center">
             <img
-              src={`http://localhost:2000/${product.ProductImage}`}
-              alt={product.ProductName}
-              className="w-full max-w-sm h-auto rounded-xl shadow-md "
+              src={`/${product.ProductImage}`}
+              alt={product.ProductName || "Product"}
+              className="w-full max-w-sm h-auto rounded-xl shadow-md"
             />
           </div>
 
@@ -47,7 +65,7 @@ export default function ProductDetails() {
               <p className="text-2xl text-blue-600 font-semibold mt-3">
                 ₹{product.Price}
               </p>
-              <p className=" text-xl mt-5 text-gray-700 leading-relaxed">
+              <p className="text-xl mt-5 text-gray-700 leading-relaxed">
                 {product.Description}
               </p>
             </div>
@@ -62,24 +80,15 @@ export default function ProductDetails() {
                   type="number"
                   value={quantity}
                   min="1"
-                  onChange={(e) => SetQuantity(Number(e.target.value))}
+                  onChange={(e) =>
+                    setQuantity(Math.max(1, Number(e.target.value)))
+                  }
                   className="border rounded-lg p-2 w-20 text-center shadow-sm focus:ring-2 focus:ring-blue-400 focus:outline-none"
                 />
               </div>
 
               <button
-                onClick={async () => {
-                  try {
-                    await api.post("/user/cart", {
-                      ProductId: product._id,
-                      Quantity: quantity,
-                    });
-                    navigate("/cart");
-                  } catch (err) {
-                    console.error("Error adding to cart:", err);
-                    alert("Please login first to add items to cart.");
-                  }
-                }}
+                onClick={handleAddToCart}
                 className="w-full md:w-auto bg-black text-white px-6 py-3 mt-6 rounded-xl text-lg font-semibold hover:bg-gray-800 transition"
               >
                 Add to Cart

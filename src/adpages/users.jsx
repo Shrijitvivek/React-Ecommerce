@@ -1,40 +1,34 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
-import Sidebar from './Sidebar'
+import React, { useState, useEffect } from "react";
+import Sidebar from "./Sidebar";
+import api from "../api/axios"; // centralized axios instance
 
 export default function Users() {
-  const [users, setUsers] = useState([])
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    fetchUsers()
-  }, [])
+    fetchUsers();
+  }, []);
 
-  const fetchUsers = () => {
-    axios.get('http://localhost:2000/admin/users', { withCredentials: true })
-      .then((res) => {
-        setUsers(res.data.users)
-      })
-      .catch((error) => {
-        console.error('Error fetching Users:', error)
-      })
-  }
+  const fetchUsers = async () => {
+    try {
+      const res = await api.get("/admin/users");
+      setUsers(res.data.users || []);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  };
 
   const toggleStatus = async (id, currentStatus) => {
     try {
-      await axios.patch(
-        `http://localhost:2000/admin/users/${id}/status`,
-        { status: !currentStatus }, 
-        { withCredentials: true }
-      )
+      await api.patch(`/admin/users/${id}/status`, { status: !currentStatus });
 
-     
       setUsers(users.map(user =>
         user._id === id ? { ...user, status: !currentStatus } : user
-      ))
+      ));
     } catch (error) {
-      console.error('Error toggling status:', error)
+      console.error("Error toggling status:", error);
     }
-  }
+  };
 
   return (
     <div className="ml-50 p-8">
@@ -59,7 +53,7 @@ export default function Users() {
                 <td className="px-4 py-2 border-b">{user.email}</td>
                 <td className="px-4 py-2 border-b">
                   <img
-                    src={`http://localhost:2000/upload/${user.image}`}
+                    src={`/${user.image}`} // relative path for Nginx
                     className="w-26 h-26 rounded-full object-cover"
                     alt={user.name}
                   />
@@ -75,10 +69,12 @@ export default function Users() {
                   <button
                     onClick={() => toggleStatus(user._id, user.status)}
                     className={`px-3 py-1 rounded-md text-white ${
-                      user.status ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'
+                      user.status
+                        ? "bg-red-500 hover:bg-red-600"
+                        : "bg-green-500 hover:bg-green-600"
                     }`}
                   >
-                    {user.status ? 'Disable' : 'Enable'}
+                    {user.status ? "Disable" : "Enable"}
                   </button>
                 </td>
               </tr>
@@ -87,5 +83,5 @@ export default function Users() {
         </table>
       </div>
     </div>
-  )
+  );
 }

@@ -1,34 +1,33 @@
-import React, { useState } from "react";
-import axios from "axios";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "../api/axios"; // ✅ centralized API instance
 
-function Login() {
+export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState(""); 
+  const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async () => {
     setLoading(true);
+    setMessage(""); // reset before new attempt
     try {
-      const response = await axios.post(
-        "http://localhost:2000/user/login",
+      const res = await api.post(
+        "/user/login",
         { email, password },
         { withCredentials: true }
       );
 
-      console.log(response.data);
-
-      if (response.data.message === "User logged in") {
+      if (res.data.message === "User logged in") {
         navigate("/");
       } else {
-        setMessage(response.data.message);
+        setMessage(res.data.message || "Login failed.");
       }
-    } catch (error) {
-      console.error("Login error", error);
+    } catch (err) {
+      console.error("Login error:", err);
       const msg =
-        error.response?.data?.message ||
+        err.response?.data?.message ||
         "Something went wrong. Please try again.";
       setMessage(msg);
     } finally {
@@ -51,7 +50,7 @@ function Login() {
             Email
           </label>
           <input
-            type="text"
+            type="email"
             id="email"
             placeholder="you@gmail.com"
             value={email}
@@ -89,7 +88,6 @@ function Login() {
           {loading ? "Logging in..." : "Login"}
         </button>
 
-      
         {message && (
           <p className="mt-4 text-center text-red-600 font-medium">{message}</p>
         )}
@@ -97,5 +95,3 @@ function Login() {
     </div>
   );
 }
-
-export default Login;

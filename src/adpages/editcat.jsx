@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
+import api from '../api/axios'; // use centralized API instance
 import Sidebar from './Sidebar';
 
 export default function Editcat() {
@@ -11,7 +11,7 @@ export default function Editcat() {
   const [description, setDescription] = useState('');
 
   useEffect(() => {
-    axios.get(`http://localhost:2000/admin/categories/${id}`, { withCredentials: true })
+    api.get(`/admin/categories/${id}`) // relative path
       .then(res => {
         if (res.data.category) {
           setName(res.data.category.name || '');
@@ -24,10 +24,7 @@ export default function Editcat() {
   }, [id]);
 
   const handleUpdate = () => {
-    axios.put(`http://localhost:2000/admin/categories/${id}`, {
-      name,
-      description
-    }, { withCredentials: true })
+    api.put(`/admin/categories/${id}`, { name, description }) // relative path
       .then(() => {
         alert('Category updated successfully!');
         navigate('/categories');

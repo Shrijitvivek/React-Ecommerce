@@ -15,49 +15,42 @@ export default function Addprod() {
     const [categories, SetCategories] = useState([])
 
     useEffect(() => {
-        axios.get('http://localhost:2000/admin/categories', { withCredentials: true }
-        )
+        axios.get('/admin/categories', { withCredentials: true })
             .then((res) => {
                 if (res.data && Array.isArray(res.data)) {
                     SetCategories(res.data)
-                }
-                else if (res.data.categories) {
+                } else if (res.data.categories) {
                     SetCategories(res.data.categories)
                 }
             })
             .catch((err) => {
                 console.error('Could not fetch categories', err)
             })
-
     }, [])
 
     const handleConfirm = () => {
         const formData = new FormData()
         formData.append('ProductName', name)
-        formData.append("Description", desc);
-        formData.append("Price", price);
-        formData.append("Category", categ);
-        formData.append("Stock", stock);
+        formData.append("Description", desc)
+        formData.append("Price", price)
+        formData.append("Category", categ)
+        formData.append("Stock", stock)
         if (image) {
-            formData.append("ProductImage", image);
+            formData.append("ProductImage", image)
         }
 
-
-        axios.post('http://localhost:2000/admin/products', formData,
-            {
+        axios.post('/admin/products', formData, {
                 withCredentials: true,
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            }
-        )
+                headers: { "Content-Type": "multipart/form-data" },
+            })
             .then(() => {
-                navigate('/products');
+                navigate('/products')
             })
             .catch((err) => {
-                console.error('Could not add product ', err);
-            });
+                console.error('Could not add product ', err)
+            })
     }
+
     return (
         <div className="flex">
             <Sidebar />
@@ -90,13 +83,8 @@ export default function Addprod() {
                             <option key={cat._id} value={cat._id}>
                                 {cat.name}
                             </option>
-
                         ))}
-
                     </select>
-
-
-
 
                     <label className="block mb-2 font-medium">Product Image</label>
                     <input
