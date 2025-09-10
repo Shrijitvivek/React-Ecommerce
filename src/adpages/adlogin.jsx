@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import api from '../api/axios'
 
 function Adlogin() {
   const [email, setEmail] = useState("")
@@ -9,10 +9,8 @@ function Adlogin() {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('/admin/login', {  // <-- changed here
+      const response = await api.post('/admin/login', {
         email, password
-      }, {
-        withCredentials: true
       })
 
       console.log(response.data)
