@@ -104,7 +104,7 @@ export default function Cart() {
               >
                 {/* Product Image */}
                 <img
-                  src={`api/prodimg${item.Proddet.ProductImage}`} 
+                  src={`api/prodimg/${item.Proddet.ProductImage}`} 
                   alt={item.Proddet.ProductName}
                   className="w-32 h-32 rounded-md cursor-pointer hover:scale-105 transition"
                   onClick={() => navigate(`/product/${item.Proddet._id}`)}

@@ -53,7 +53,7 @@ export default function Users() {
                 <td className="px-4 py-2 border-b">{user.email}</td>
                 <td className="px-4 py-2 border-b">
                   <img
-                    src={`/${user.image}`} // relative path for Nginx
+                    src={`api/upload/${user.image}`}
                     className="w-26 h-26 rounded-full object-cover"
                     alt={user.name}
                   />

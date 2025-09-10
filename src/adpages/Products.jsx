@@ -71,7 +71,7 @@ export default function Products() {
                   <td className="px-4 py-2 border-b">
                     {product.ProductImage ? (
                       <img
-                        src={`api/prodimg${product.ProductImage}`} 
+                        src={`api/prodimg/${product.ProductImage}`} 
                         className="w-30 h-30"
                         alt={product.ProductName}
                       />
