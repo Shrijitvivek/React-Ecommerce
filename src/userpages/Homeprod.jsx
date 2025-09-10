@@ -10,8 +10,8 @@ export default function Homeprod() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  // ✅ Use relative path instead of hardcoded localhost (Nginx friendly)
-  const imgBase = "/api/prodimg/";
+
+  const imgBase = "api/prodimg/";
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -81,7 +81,7 @@ export default function Homeprod() {
                 <img
                   src={imgBase + product.ProductImage}
                   alt={product.ProductName}
-                  className="ml-5 mt-5 h-52 w-52 rounded-t-xl object-cover"
+                  className="ml-5 mt-5 h-52 w-52 rounded-t-xl "
                 />
                 <div className="p-4">
                   <h2 className="text-lg font-semibold text-gray-800 truncate">
