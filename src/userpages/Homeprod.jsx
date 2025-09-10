@@ -11,7 +11,7 @@ export default function Homeprod() {
   const navigate = useNavigate();
 
   // ✅ Use relative path instead of hardcoded localhost (Nginx friendly)
-  const imgBase = "/uploads/";
+  const imgBase = "/api/prodimg/";
 
   useEffect(() => {
     const fetchProducts = async () => {
