@@ -50,7 +50,7 @@ export default function ProductDetails() {
           {/* Product Image */}
           <div className="flex justify-center items-center">
             <img
-              src={`api/prodimg/${product.ProductImage}`}
+              src={`/api/prodimg/${product.ProductImage}`}
               alt={product.ProductName || "Product"}
               className="w-full max-w-sm h-auto rounded-xl shadow-md"
             />

@@ -85,10 +85,12 @@ export default function CategoryPage() {
                       onClick={() => navigate(`/product/${p._id}`)}
                     >
                       <img
-                        src={`api/prodimg/${p.ProductImage}`}
+                        src={`/api/prodimg/${p.ProductImage}`}
+                       
                         alt={p.ProductName}
                         className="ml-5 mt-4 w-46 h-46 rounded-md mb-3 mr-5"
                       />
+                      
                       <h3 className="font-semibold text-lg truncate">{p.ProductName}</h3>
                       <p className="text-blue-600 font-bold mt-2">₹{p.Price}</p>
                     </div>
