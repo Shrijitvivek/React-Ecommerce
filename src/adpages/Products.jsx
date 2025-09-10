@@ -71,7 +71,7 @@ export default function Products() {
                   <td className="px-4 py-2 border-b">
                     {product.ProductImage ? (
                       <img
-                        src={`/${product.ProductImage}`} // relative path for nginx
+                        src={`/api/prodimg${product.ProductImage}`} // relative path for nginx
                         className="w-30 h-30"
                         alt={product.ProductName}
                       />
