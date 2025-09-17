@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://16.16.24.28:2000/api',   // <- Use relative paths so Nginx proxy works
+  baseURL: '/api',   // <- Use relative paths so Nginx proxy works
   withCredentials: true,
 });
 
