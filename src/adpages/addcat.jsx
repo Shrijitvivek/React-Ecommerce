@@ -8,8 +8,9 @@ export default function Addcat() {
     const [description, setDescription] = useState(""); 
     const navigate = useNavigate();
 
+ // Navigation hook for redirecting after success
     const handleSave = () => {
-        axios.post('/admin/categories', { name, description }, 
+        axios.post('/admin/categories', { name, description }, // api endpoint
             { withCredentials: true }
         )
         .then(() => {
