@@ -16,7 +16,7 @@ function Adlogin() {
       console.log(response.data)
 
       if (response.data.message1) {
-        localStorage.setItem('admin', true)
+        localStorage.setItem('admin', true) // set admin in localstorage
         navigate('/admindash')
       }
     } catch (error) {
