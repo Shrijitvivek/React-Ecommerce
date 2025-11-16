@@ -29,7 +29,7 @@ export default function Addprod() {
     }, [])
 
     const handleConfirm = () => {
-        const formData = new FormData()
+        const formData = new FormData() // passing as formdata as image exists
         formData.append('ProductName', name)
         formData.append("Description", desc)
         formData.append("Price", price)
